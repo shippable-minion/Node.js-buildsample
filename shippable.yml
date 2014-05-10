@@ -9,12 +9,18 @@ language: node_js
 node_js:
 - 0.10.25
 
-services: mongodb
+env:
+  - NODE_ENV=shippable
+services:
+  - mongodb
 
 before_script: mkdir -p shippable/codecoverage
 after_script:
   - ./node_modules/.bin/istanbul cover ./node_modules/.bin/_mocha -- -u tdd
   - ./node_modules/.bin/istanbul report cobertura --dir shippable/codecoverage/
+
+after_success:
+  - git push git@heroku.com:shipnow.git master  
 notifications:
   email:
     - exampleone@org.com
